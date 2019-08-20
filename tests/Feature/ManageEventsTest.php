@@ -16,7 +16,7 @@ class ManageEventsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        factory('App\Event', 2)->create();
+        factory('App\Event', 2)->create(['date' => $this->faker->dateTimeBetween('+1 days', '+1 years')]);
         factory('App\Event')->create(['date' => $this->faker->dateTimeBetween('-1 years', '-1 days')]);
 
         $res = $this->get('/api/events')

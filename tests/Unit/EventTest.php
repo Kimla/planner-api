@@ -15,7 +15,7 @@ class EventTest extends TestCase
     /** @test */
     public function can_query_future_events()
     {
-        factory('App\Event', 2)->create();
+        factory('App\Event', 2)->create(['date' => $this->faker->dateTimeBetween('+1 days', '+1 years')]);
         factory('App\Event')->create(['date' => $this->faker->dateTimeBetween('-1 years', '-1 days')]);
 
         $events = Event::future()->get();
