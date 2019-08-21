@@ -15,7 +15,9 @@ class Event extends Model
         parent::boot();
 
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('date', 'asc');
+            $builder
+                ->orderBy('date', 'asc')
+                ->orderBy('id', 'desc');
         });
     }
 
