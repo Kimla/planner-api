@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Event;
+use Carbon\Carbon;
 
 class EventsController extends Controller
 {
@@ -43,10 +44,16 @@ class EventsController extends Controller
 
     protected function validateRequest()
     {
-        return request()->validate([
+        request()->validate([
             'title' => 'required',
             'date' => 'required',
             'description' => 'nullable'
         ]);
+
+        return [
+            'title' => request('title'),
+            'date' => Carbon::parse(request('date'))->format('Y-m-d'),
+            'description' => request('description'),
+        ];
     }
 }
