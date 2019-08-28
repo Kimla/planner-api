@@ -10,26 +10,30 @@ class EventsController extends Controller
 {
     public function getUpcoming()
     {
-        return Event::future()->get();
+        return auth()->user()->events()->future()->get();
     }
 
     public function getByWeek($week, $year)
     {
-        return Event::weekYear($week, $year)->get();
+        return auth()->user()->events()->weekYear($week, $year)->get();
     }
 
     public function getByDate($date)
     {
-        return Event::date($date)->get();
+        return auth()->user()->events()->date($date)->get();
     }
 
     public function store()
     {
-        return Event::create($this->validateRequest());
+        return auth()->user()->events()->create($this->validateRequest());
     }
 
     public function update(Event $event)
     {
+        if ($event->user_id != auth()->user()->id) {
+            return response()->json(['message' => 'error'], 401);
+        }
+
         $event->update($this->validateRequest());
 
         return $event->fresh();
@@ -37,6 +41,10 @@ class EventsController extends Controller
 
     public function destroy(Event $event)
     {
+        if ($event->user_id != auth()->user()->id) {
+            return response()->json(['message' => 'error'], 401);
+        }
+
         $event->delete();
 
         return response()->json(null);
@@ -51,6 +59,7 @@ class EventsController extends Controller
         ]);
 
         return [
+            'user_id' => auth()->user()->id,
             'title' => request('title'),
             'date' => Carbon::parse(request('date'))->format('Y-m-d'),
             'description' => request('description'),

@@ -18,14 +18,16 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/events', 'EventsController@getUpcoming');
+    Route::get('/events/date/{date}', 'EventsController@getByDate');
+    Route::get('/events/week/{week}/{year}', 'EventsController@getByWeek');
+    Route::post('/events', 'EventsController@store');
+    Route::put('/events/{event}', 'EventsController@update');
+    Route::delete('/events/{event}', 'EventsController@destroy');
 });
 
-Route::get('/events', 'EventsController@getUpcoming');
-Route::get('/events/date/{date}', 'EventsController@getByDate');
-Route::get('/events/week/{week}/{year}', 'EventsController@getByWeek');
-Route::post('/events', 'EventsController@store');
-Route::put('/events/{event}', 'EventsController@update');
-Route::delete('/events/{event}', 'EventsController@destroy');
+
 
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('login', 'Auth\LoginController@login');
