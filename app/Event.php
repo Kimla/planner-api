@@ -41,4 +41,9 @@ class Event extends Model
 
         return $query->whereBetween('date', [$startOfWeek, $endOfWeek]);
     }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

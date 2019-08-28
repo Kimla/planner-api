@@ -30,8 +30,10 @@ class EventsController extends Controller
 
     public function update(Event $event)
     {
-        if ($event->user_id != auth()->user()->id) {
-            return response()->json(['message' => 'error'], 401);
+        try {
+            $this->authorize('manage', $event);
+        } catch (\Throwable $th) {
+            return response()->json(null, 403);
         }
 
         $event->update($this->validateRequest());
@@ -41,8 +43,10 @@ class EventsController extends Controller
 
     public function destroy(Event $event)
     {
-        if ($event->user_id != auth()->user()->id) {
-            return response()->json(['message' => 'error'], 401);
+        try {
+            $this->authorize('manage', $event);
+        } catch (\Throwable $th) {
+            return response()->json(null, 403);
         }
 
         $event->delete();

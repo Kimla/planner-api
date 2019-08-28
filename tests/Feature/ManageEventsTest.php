@@ -47,7 +47,7 @@ class ManageEventsTest extends TestCase
 
         $this->actingAs($this->user)
             ->put('/api/events/' . $event->id, $newAttributes)
-            ->assertStatus(401);
+            ->assertStatus(403);
     }
 
     /** @test */
@@ -169,8 +169,8 @@ class ManageEventsTest extends TestCase
         $secondEvent = factory('App\Event')->create();
 
         $this->actingAs($this->user)
-            ->delete("/api/events/{$secondEvent->id}")
-            ->assertStatus(401);
+            ->deleteJson("/api/events/{$secondEvent->id}")
+            ->assertStatus(403);
 
         $this->assertDatabaseHas('events', $secondEvent->only('id'));
     }
